@@ -1,20 +1,49 @@
 #!/usr/bin/env node
 
 import { Command } from 'commander';
+import path from 'path';
+import fs from 'fs';
 
 const program = new Command();
 
-program
+const gendiff = program
   .name('gendiff')
-  .description('Compares two configuration files and shows a difference.')
-  .option('-f, --format <type>', 'output format', 'stylish')
-  .version('0.0.1', '-V, --version', 'output the version number')
-  .helpOption('-h, --help', 'display help for command')
-  .argument('<filepath1>', 'path to first file')
-  .argument('<filepath2>', 'path to first file')
-  .action((filepath1, filepath2) => {
-    console.log(`Comparing files: ${filepath1} and ${filepath2}`);
-    console.log(`Output format: ${program.opts().format}`);
+  .option('-f, --format', 'type format')
+  .argument('<filepath1>')
+  .argument('<filepath2>')
+  .action((a, b, options) => {
+    console.log('a', a);
+    console.log('b', b);
+    console.log('options', options);
   });
 
-program.parse(process.args);
+  gendiff
+    .command('split')
+    .argument('<string>')
+    .action((str => {
+      console.log(str.split(':'))
+    }));
+
+  gendiff
+    .command('generate')
+    .description('generate template for project')
+    .action(() => {
+      const srcDir = path.join(process.cwd(), 'src');
+      const indexFile = path.join(srcDir, 'index.js');
+      const parseFile = path.join(srcDir, 'parser.js');
+
+      if (!fs.existsSync(srcDir)) {
+        fs.mkdirSync(scrDir);
+      }
+      const parserContent = `export default () => {\n   console.log('parser');\n}`;
+      fs.writeFileSync(parserFile, parserContent);
+
+      const indexContent = `import parsr from "./parser.js";\n\nexport default () => \n   console.log('gendiff');\n    parser();\n}`;
+      fs.writeFileSync(indexFile, indexContent);
+
+      console.log('Projct structur generated successfully');
+    });
+
+    gendiff.parse();
+
+program.parse();
