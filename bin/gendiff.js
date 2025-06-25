@@ -8,7 +8,9 @@ const program = new Command();
 
 const gendiff = program
   .name('gendiff')
+  .description('Compares two configuration files and shows a difference.')
   .option('-f, --format', 'type format')
+  .version('0.0.1', '-v, --version', 'output the current version')
   .argument('<filepath1>')
   .argument('<filepath2>')
   .action((a, b, options) => {
@@ -30,18 +32,18 @@ const gendiff = program
     .action(() => {
       const srcDir = path.join(process.cwd(), 'src');
       const indexFile = path.join(srcDir, 'index.js');
-      const parseFile = path.join(srcDir, 'parser.js');
+      const parserFile = path.join(srcDir, 'parser.js');
 
       if (!fs.existsSync(srcDir)) {
-        fs.mkdirSync(scrDir);
+        fs.mkdirSync(srcDir);
       }
       const parserContent = `export default () => {\n   console.log('parser');\n}`;
       fs.writeFileSync(parserFile, parserContent);
 
-      const indexContent = `import parsr from "./parser.js";\n\nexport default () => \n   console.log('gendiff');\n    parser();\n}`;
+      const indexContent = `import parser from "./parser.js";\n\nexport default () => {\n   console.log('gendiff');\n    parser();\n}`;
       fs.writeFileSync(indexFile, indexContent);
 
-      console.log('Projct structur generated successfully');
+      console.log('Project structure generated successfully');
     });
 
     gendiff.parse();
