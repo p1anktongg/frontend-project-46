@@ -1,27 +1,19 @@
 #!/usr/bin/env node
 
 import { Command } from 'commander';
-import { createRequire } from 'module';
 import genDiff from '../src/index.js';
-
-const require = createRequire(import.meta.url);
-const pkg = require('../package.json');
 
 const program = new Command();
 
 program
-  .name('gendiff')
+  .version('1.0.0')
   .description('Compares two configuration files and shows a difference.')
-  .version(pkg.version)
-  .argument('<filepath1>')
-  .argument('<filepath2>')
-  .action((filepath1, filepath2) => {
-    try {
-      console.log(genDiff(filepath1, filepath2));
-    } catch (error) {
-      console.error('Error:', error.message);
-      process.exit(1);
-    }
+  .argument('<filepath1>', 'path to first config file')
+  .argument('<filepath2>', 'path to second config file')
+  .option('-f, --format [type]', 'output format', 'stylish')
+  .action((filepath1, filepath2, options) => {
+    const result = genDiff(filepath1, filepath2, options.format);
+    console.log(result);
   });
 
 program.parse();

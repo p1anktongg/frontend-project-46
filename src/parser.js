@@ -1,4 +1,15 @@
-export default (data, format) => {
-  if (format === 'json') return JSON.parse(data);
-  throw new Error(`Unsupported format: ${format}`);
+import fs from 'fs';
+import path from 'path';
+
+const parseFile = (filepath) => {
+  const content = fs.readFileSync(filepath, 'utf-8');
+  const ext = path.extname(filepath).toLowerCase();
+  
+  if (ext === '.json') {
+    return JSON.parse(content);
+  }
+  
+  throw new Error(`Unsupported file extension: ${ext}`);
 };
+
+export default parseFile;

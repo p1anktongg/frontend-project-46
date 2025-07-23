@@ -1,30 +1,38 @@
-import _ from 'lodash';
-import { readFileSync } from 'fs';
-import { resolve } from 'path';
+import parseFile from './parser.js';
+import path from 'path';
 
-const getDiff = (file1, file2) => {
-  const keys = _.sortBy(_.union(_.keys(file1), _.keys(file2)));
+const genDiff = (filepath1, filepath2, formagt = 'stylish') => {
   
-  return keys.map((key) => {
-    if (!_.has(file1, key)) {
-      return `  + ${key}: ${file2[key]}`;
+  const absolutePath1 = path.isAbsolute(filepath1) ? filepath1 : path.resolve(process.cwd(), filepath1);
+  const absolutePath2 = path.isAbsolute(filepath2) ? filepath2 : path.resolve(process.cwd(), filepath2);
+  
+  
+  const data1 = parseFile(absolutePath1);
+  const data2 = parseFile(absolutePath2);
+  
+  
+  const keys = [...new Set([...Object.keys(data1), ...Object.keys(data2)])].sort();
+  
+  const diffLines = [];
+  
+  keys.forEach(key => {
+    if (!Object.hasOwn(data1, key)) {
+     
+      diffLines.push(`  + ${key}: ${String(data2[key])}`);
+    } else if (!Object.hasOwn(data2, key)) {
+     
+      diffLines.push(`  - ${key}: ${String(data1[key])}`);
+    } else if (data1[key] !== data2[key]) {
+      
+      diffLines.push(`  - ${key}: ${String(data1[key])}`);
+      diffLines.push(`  + ${key}: ${String(data2[key])}`);
+    } else {
+      
+      diffLines.push(`    ${key}: ${String(data1[key])}`);
     }
-    if (!_.has(file2, key)) {
-      return `  - ${key}: ${file1[key]}`;
-    }
-    if (!_.isEqual(file1[key], file2[key])) {
-      return [`  - ${key}: ${file1[key]}`, `  + ${key}: ${file2[key]}`].join('\n');
-    }
-    return `    ${key}: ${file1[key]}`;
-  }).join('\n');
+  });
+  
+  return `{\n${diffLines.join('\n')}\n}`;
 };
 
-export default (filepath1, filepath2) => {
-  const content1 = readFileSync(resolve(filepath1), 'utf-8');
-  const content2 = readFileSync(resolve(filepath2), 'utf-8');
-  
-  const file1 = JSON.parse(content1);
-  const file2 = JSON.parse(content2);
-
-  return `{\n${getDiff(file1, file2)}\n}`;
-};
+export default genDiff;
