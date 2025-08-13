@@ -18,7 +18,8 @@
   "type": "module",
   "main": "src/index.js",
   "scripts": {
-    "test": "npx jest",
+    "test": "jest",
+    "test:watch": "jest --watch",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix"
   },
@@ -27,8 +28,17 @@
     "lodash": "^4.17.21"
   },
   "devDependencies": {
+    "@eslint/eslintrc": "^3.3.1",
+    "@eslint/js": "^9.33.0",
     "eslint": "^9.33.0",
     "globals": "^16.3.0",
     "jest": "^30.0.5"
+  },
+  "jest": {
+    "testEnvironment": "node",
+    "collectCoverage": true,
+    "collectCoverageFrom": [
+      "src/**/*.js"
+    ]
   }
 }

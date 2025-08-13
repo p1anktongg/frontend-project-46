@@ -3,10 +3,14 @@ import path from 'path';
 
 const parseData = (data, format) => {
   switch (format) {
-    case 'json':
-      return JSON.parse(data);
-    default:
-      throw new Error(`Unsupported format: ${format}`);
+  case 'json':
+    // Обрабатываем пустые файлы
+    if (!data.trim()) {
+      return {};
+    }
+    return JSON.parse(data);
+  default:
+    throw new Error(`Unsupported format: ${format}`);
   }
 };
 
