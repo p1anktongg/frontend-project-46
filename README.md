@@ -4,4 +4,5 @@
 
 ### Asciinema of gendiff work
 [![asciicast](https://asciinema.org/a/MQhMOa4r5y5lYwx9JrnSvJrHx.svg)](https://asciinema.org/a/MQhMOa4r5y5lYwx9JrnSvJrHx) 
+[![asciicast](https://asciinema.org/a/YTrQZzq2t0ZUBktDOhH2YKG4C.svg)](https://asciinema.org/a/YTrQZzq2t0ZUBktDOhH2YKG4C)
 
