@@ -2,9 +2,9 @@ import globals from 'globals';
 
 export default [
   {
-    files: ['**/*.js', '**/*.mjs'],
+    files: ['**/*.js'], 
     languageOptions: {
-      ecmaVersion: 2021,
+      ecmaVersion: 2022, 
       sourceType: 'module',
       globals: {
         ...globals.node,
@@ -14,7 +14,9 @@ export default [
     rules: {
       indent: ['error', 2],
       quotes: ['error', 'single'],
-      semi: ['error', 'always']
+      semi: ['error', 'always'],
+      
+      'no-unused-vars': ['error', { argsIgnorePattern: '^_', varsIgnorePattern: '^_' }]
     }
   },
   {
@@ -24,6 +26,10 @@ export default [
         ...globals.node,
         ...globals.jest
       }
+    },
+    rules: {
+      
+      'no-undef': 'off'
     }
   }
 ];

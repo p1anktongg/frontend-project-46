@@ -2,7 +2,6 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 import genDiff from '../src/index.js';
 
-// Создаем __dirname для ES modules
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
@@ -52,6 +51,36 @@ test('genDiff with one empty file', () => {
   + host: "hexlet.io"
   + proxy: "123.234.53.22"
   + timeout: 50
+}`;
+  
+  expect(genDiff(filepath1, filepath2)).toBe(expected);
+});
+
+test('genDiff flat yaml files', () => {
+  const filepath1 = getFixturePath('file1.yaml');
+  const filepath2 = getFixturePath('file2.yaml');
+  const expected = `{
+  - follow: false
+    host: "hexlet.io"
+  - proxy: "123.234.53.22"
+  - timeout: 50
+  + timeout: 20
+  + verbose: true
+}`;
+  
+  expect(genDiff(filepath1, filepath2)).toBe(expected);
+});
+
+test('genDiff mixed formats (json and yaml)', () => {
+  const filepath1 = getFixturePath('file1.json');
+  const filepath2 = getFixturePath('file2.yaml');
+  const expected = `{
+  - follow: false
+    host: "hexlet.io"
+  - proxy: "123.234.53.22"
+  - timeout: 50
+  + timeout: 20
+  + verbose: true
 }`;
   
   expect(genDiff(filepath1, filepath2)).toBe(expected);
